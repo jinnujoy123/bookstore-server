@@ -3,6 +3,7 @@
 require('dotenv').config()
 const express=require('express')
 const cors=require('cors')
+
 const router=require('./routing/router')
 require('./db/connection')
 
@@ -15,6 +16,7 @@ bookstoreServer.use(cors())
 bookstoreServer.use(express.json())
 bookstoreServer.use(router)
 
+
 // create port
 const PORT =3000
 
@@ -26,7 +28,7 @@ bookstoreServer.listen(PORT,()=>{
 
 // resolving http request
 bookstoreServer.get('/',(req,res)=>{
-    res.status(200).send('<h1>Bookstore Server started ...and waiting for client requests!!!</h1>')
+    res.status(200).send('<h1>Bookstore Server started!!!!and waiting for client requests!!!</h1>')
 })
 
 
