@@ -44,7 +44,7 @@ const bookSchema=new mongoose.Schema({
         type:String,
         required:true
     },
-    uploading:{
+    uploadImg:{
         type:Array,
         required:true
     },
@@ -52,13 +52,13 @@ const bookSchema=new mongoose.Schema({
         type:String,
         default:"pending"
     },
-    userEmail:{
+    userMail:{
         type:String,
         required:true
     },
     bought:{
         type:String,
-        required:true
+        default:""
     },
 })
 const books=mongoose.model("books",bookSchema)
