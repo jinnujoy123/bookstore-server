@@ -1,4 +1,5 @@
-const books=require('../models/bookModel')
+const books=require('../models/bookModel');
+const { createSearchIndex } = require('../models/userModel');
 
 // add book
 exports.addBookController = async (req,res)=>{
@@ -8,7 +9,7 @@ exports.addBookController = async (req,res)=>{
     const{title,author,noOfPages,imageUrl,price,discountPrice,abstract,publisher,language,isbn,category}=req.body
     const userMail=req.payload
 console.log(req.files);
-const uploadImg=req.files
+var uploadImg=[]
     req.files.map(item=>uploadImg.push(item.filename))
     console.log((title,author,noOfPages,imageUrl,price,discountPrice,abstract,publisher,language,isbn,category,uploadImg));
     try{
@@ -29,7 +30,7 @@ res.status(500).json(err)
 }
 
 // get home books
-exports.getHomeBooks=async(req,res)=>{
+exports.getHomeBooksController=async(req,res)=>{
     console.log("Inside getHomeBooks");
     try{
         const allHomeBooks=await books.find().sort({_id:-1}).limit(4)
@@ -37,4 +38,79 @@ exports.getHomeBooks=async(req,res)=>{
     }catch(err){
         res.status(500).json(err)
     }
+}
+
+exports.getAllBooksController=async(req,res)=>{
+    console.log("Inside AllBooks");
+    const searchKey=req.query.search
+    const email=req.payload
+    const query={
+        title:{$regex : searchKey,$options:'i'},
+        userMail:{$ne:email}
+    }
+    try{
+        const allBooks=await books.find(query)
+        res.status(200).json(allBooks)
+    }catch(err){
+        res.status(500).json(err)
+    }
+}
+
+// view Book
+
+exports.viewBookController = async (req,res)=>{
+    console.log("Inside viewBookController");
+    const {id}=req.params 
+      
+    console.log(id);
+    try{
+        const viewBook =await books.findById({_id:id})
+            res.status(200).json(viewBook)
+            console.log(viewBook);
+            
+        
+    }catch(err){
+        res.status(500).json(err)
+    }
+    
+}
+
+// get user books
+
+exports.getAllUserBooksController=async(req,res)=>{
+    console.log("Inside getAllUserBooks");
+        
+    
+    try{
+        const allUserBooks=await books.find( { userMail:email})
+        res.status(200).json(allUserBooks)
+    }catch(err){
+        res.status(500).json(err)    }
+}
+
+// user bought books
+exports.getAllUserBoughtBooksController=async(req,res)=>{
+    console.log("Inside getAllUserBoughtBooks");
+     const email=req.payload   
+    
+    try{
+        const allUserBoughtBooks=await books.find( { bought:email})
+        res.status(200).json(allUserBoughtBooks)
+    }catch(err){
+        res.status(500).json(err)    }
+}
+
+// delete user uploaded books
+exports.deleteUserBookController=async(req,res)=>{
+    console.log("Inside deleteUserBookController");
+    // get book id
+    const {id}=req.params
+    console.log(id);
+    try{
+        await books.findByIdAndDelete({_id:id})
+        res.status(200).json("Deleted suucessfully")
+    }catch(err){
+        res.status(500).json(err)
+    }
+    
 }

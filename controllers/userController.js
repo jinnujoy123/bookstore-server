@@ -1,6 +1,7 @@
 const users=require('../models/userModel')
 const jwt = require('jsonwebtoken')
 
+// register
 exports.registerController=async(req,res)=>{
 console.log("inside register API");
 // console.log(req.body);

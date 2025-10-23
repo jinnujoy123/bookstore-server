@@ -17,7 +17,17 @@ router.post('/google-login',userController.googleLoginController)
 // add-book
 router.post('/add-book',jwtMiddleware,multerConfig.array('uploadImages',3),bookController.addBookController)
 // home-books
-router.get('/home-books',bookController.getHomeBooks)
+router.get('/home-books',bookController.getHomeBooksController)
+// all-books
+router.get('/all-books',jwtMiddleware,bookController.getAllBooksController)
+// view-book
+router.get('/books/:id/view',jwtMiddleware,bookController.viewBookController)
+// // get user books
 
+// router.get('/user-books',jwtMiddleware,bookController.getAllUserBooksController)
+// // get user bought books
+// router.get('/user-bought-books',jwtMiddleware,bookController.getAllUserBoughtBooksController)
+// // delete user books
+// router.get('/user-books/:id/remove',jwtMiddleware,bookController.deleteUserBooksController)
 
 module.exports=router
