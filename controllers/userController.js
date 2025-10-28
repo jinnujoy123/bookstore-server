@@ -26,10 +26,9 @@ try{
 }
 
 // login
-
 exports.loginController=async(req,res)=>{
 console.log("inside login API");
-// console.log(req.body);
+console.log(req.body);
 const {email,password}=req.body
 console.log(email,password);
 try{
@@ -37,7 +36,7 @@ try{
     if(existingUser){
     if(existingUser.password==password){
         // token
-        const token=jwt.sign({userMail:existingUser.email},process.env.JWTSECRET)
+        const token=jwt.sign({userMail:existingUser.email,role:existingUser.role},process.env.JWTSECRET)
             res.status(200).json({user:existingUser,token})
     }else{
         res.status(401).json("Invalid email / password...")
@@ -51,6 +50,7 @@ try{
 }
 }
 
+// google login
 exports.googleLoginController=async(req,res)=>{
 console.log("inside Google Login API");
 // console.log(req.body);
@@ -61,7 +61,7 @@ try{
     if(existingUser){
    
         // token
-        const token=jwt.sign({userMail:existingUser.email},process.env.JWTSECRET)
+        const token=jwt.sign({userMail:existingUser.email,role:existingUser.role},process.env.JWTSECRET)
             res.status(200).json({user:existingUser,token})
     
 }
@@ -77,4 +77,37 @@ try{
 }catch(err){
     res.status(500).json(err)
 }
+}
+
+//profile - user
+exports.userProfileEditController=async(req,res)=>{
+    console.log("inside userProfileEditController");
+    // get data to be updated from req , body , payload , files 
+    const {username,password,bio,role,profile}=req.body
+    console.log("inside userProfileEditController");
+    
+    const email = req.payload
+    const uploadProfile=req.file?req.file.filename:profile
+    try{
+        const updateUser=await users.findOneAndUpdate({email},{username, email,password,profile: uploadProfile,bio,role},{new:true})
+        await updateUser.save()
+        res.status(200).json(updateUser)
+        }catch(err){
+        res.status(500).json(err)
+    }
+}
+
+
+// --------admin----------
+
+// get all users
+exports.getAllUsersController = async (req,res)=>{
+    console.log("inside getAllUserController");
+    const email=req.payload
+    try{
+        const allUsers=await users.find({email:{$ne:email}})
+        res.status(200).json(allUsers)
+    }catch(err){
+        res.status(500).json(err)
+    }
 }

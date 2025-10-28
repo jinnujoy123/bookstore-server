@@ -13,13 +13,13 @@ const storage=multer.diskStorage({
 
 const fileFilter=(req,file,cb)=>{
     // image with png,jpg,jpeg
-    if(file.mimetype=='image/png'||file.mimetype=='image/jpg'||file.mimetype=='image/jpeg'){
+    if(file.mimetype=='image/png'||file.mimetype=='image/jpg'||file.mimetype=='image/jpeg'||file.mimetype=='image/webp'){
         cb(null,true)
        
         
     }else{
         cb(null,false)
-        return cb(new Error("Accept only png,jpg or jpeg files"))
+        return cb(new Error("Accept only png,jpg,webp or jpeg files"))
     }
 }
 
