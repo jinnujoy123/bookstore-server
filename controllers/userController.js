@@ -87,7 +87,7 @@ exports.userProfileEditController=async(req,res)=>{
     console.log("inside userProfileEditController");
     
     const email = req.payload
-    const uploadProfile=req.file?req.file.filename:profile
+    const uploadProfile=req.file ? req.file.filename : profile
     try{
         const updateUser=await users.findOneAndUpdate({email},{username, email,password,profile: uploadProfile,bio,role},{new:true})
         await updateUser.save()
